@@ -1,0 +1,40 @@
+CREATE TABLE test(c1 INT);
+INSERT INTO test VALUES (1), (2);
+
+-- Create a permanent function called `simple_udf`. 
+CREATE FUNCTION simple_udf AS 'SimpleUdf'
+    USING JAR '/tmp/SimpleUdf.jar';
+
+-- Verify that the function is in the registry.
+SHOW USER FUNCTIONS;
+
+
+-- Invoke the function. Every selected value should be incremented by 10.
+SELECT simple_udf(c1) AS function_return_value FROM test;
+
+-- Created a temporary function.
+CREATE TEMPORARY FUNCTION simple_temp_udf AS 'SimpleUdf' 
+    USING JAR '/tmp/SimpleUdf.jar';
+
+-- Verify that the newly created temporary function is in the registry.
+-- Please note that the temporary function does not have a qualified
+-- database associated with it.
+SHOW USER FUNCTIONS;
+
+
+-- 1. Modify `SimpleUdf`'s implementation to add supplied integral value by 20.
+--    import org.apache.hadoop.hive.ql.exec.UDF;
+  
+--    public class SimpleUdfR extends UDF {
+--      public int evaluate(int value) {
+--        return value + 20;
+--      }
+--    }
+-- 2. Compile and place it in a jar file called `SimpleUdfR.jar` in /tmp.
+
+-- Replace the implementation of `simple_udf`
+CREATE OR REPLACE FUNCTION simple_udf AS 'SimpleUdfR'
+    USING JAR '/tmp/SimpleUdfR.jar';
+
+-- Invoke the function. Every selected value should be incremented by 20.
+SELECT simple_udf(c1) AS function_return_value FROM test;

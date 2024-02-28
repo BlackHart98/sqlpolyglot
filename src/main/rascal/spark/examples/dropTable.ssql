@@ -1,0 +1,15 @@
+DROP TABLE employeetable;
+
+-- Assumes a table named `employeetable` exists in the `userdb` database
+DROP TABLE userdb.employeetable;
+
+-- Assumes a table named `employeetable` does not exist.
+-- Throws exception
+DROP TABLE employeetable;
+
+-- Assumes a table named `employeetable` does not exist,Try with IF EXISTS
+-- this time it will not throw exception
+DROP TABLE IF EXISTS employeetable;
+
+-- Completely purge the table skipping trash.
+DROP TABLE employeetable PURGE;

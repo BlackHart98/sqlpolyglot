@@ -1,0 +1,26 @@
+USE userdb;
+
+-- Use the 'userdb1' which doesn't exist
+USE userdb1;
+
+
+create view if not exists date_dimension  as
+select  
+    date_format(d,'yyyy-MM-dd') as id,
+    d as full_date,
+    year (d) as year,
+    fromUnixTimeOneParam (unixTimestampOneParam (d) - 86400 * date_format (d,'u') - 1) as week_start_date,
+    date_format (d,'u') as week_day,
+    date_format (d,'EEEE') as day_name,
+    case   When date_format (d,'u') in array(6,7) then 0  else 1 end as day_is_weekday,
+    date_format (d,'MM') as month,
+    date_format (d,'MMMM') as month_name,
+    date_format (d,'Q') as fiscal_qtr,
+    year (d) as fiscal_year 
+from d
+;
+
+
+SET spark.sql.variable.substitute=false;
+
+SET -v;

@@ -1,0 +1,81 @@
+create  table if not exists Fact_sales (order_id int ,product_id int ,customer_id int ,employee_id int ,shipper_id int ,quantity int ,unit_price float ,discount float ,status_id int ,date_allocated date ,purchase_order_id int ,inventory_id int ,order_date date ,shipped_date date ,paid_date date ,insertion_timestamp TIMESTAMP  )                    ;
+insert overwrite  table dim_product   select  
+ case   When new.product_id  is not null then new.product_id  else existing.product_id end as product_id,
+ case   When new.product_code  is not null then new.product_code  else existing.product_code end as product_code,
+ case   When new.product_name  is not null then new.product_name  else existing.product_name end as product_name,
+ case   When new.description  is not null then new.description  else existing.description end as description,
+ case   When new.supplier_company  is not null then new.supplier_company  else existing.supplier_company end as supplier_company,
+ case   When new.standard_cost  is not null then new.standard_cost  else existing.standard_cost end as standard_cost,
+ case   When new.list_price  is not null then new.list_price  else existing.list_price end as list_price,
+ case   When new.reorder_level  is not null then new.reorder_level  else existing.reorder_level end as reorder_level,
+ case   When new.target_level  is not null then new.target_level  else existing.target_level end as target_level,
+ case   When new.quantity_per_unit  is not null then new.quantity_per_unit  else existing.quantity_per_unit end as quantity_per_unit,
+ case   When new.discontinued  is not null then new.discontinued  else existing.discontinued end as discontinued,
+ case   When new.minimum_reorder_quantity  is not null then new.minimum_reorder_quantity  else existing.minimum_reorder_quantity end as minimum_reorder_quantity,
+ case   When new.category  is not null then new.category  else existing.category end as category,
+ case   When new.attachments  is not null then new.attachments  else existing.attachments end as attachments,
+ case   When new.insertion_timestamp  is not null then new.insertion_timestamp  else existing.insertion_timestamp end as insertion_timestamp 
+         from dim_product as existing  
+          
+          
+          
+          
+          full outer join stg_new_product as new   on existing.product_id==new.product_id 
+          where existing.product_id or (new.row_number==1)
+          
+          
+          
+          
+          
+          
+        ;
+drop table if exists Dim_product ;
+create table  Dim_product
+  like Stg_new_product 
+    
+    
+    
+     
+       
+   ;
+create    view if not exists date_dimension  as select  
+ date_format (d,'yyyy-MM-dd') as id,
+ d as full_date,
+ year (d) as year,
+ fromUnixTimeOneParam (unixTimestampOneParam (d) - 86400 * date_format (d,'u') - 1) as week_start_date,
+ date_format (d,'u') as week_day,
+ date_format (d,'EEEE') as day_name,
+ case   When date_format (d,'u') in array(6,7) then 0  else 1 end as day_is_weekday,
+ date_format (d,'MM') as month,
+ date_format (d,'MMMM') as month_name,
+ date_format (d,'Q') as fiscal_qtr,
+ year (d) as fiscal_year 
+         from (select  
+ explode (split (space (dateDiff ('2050-01-01','2014-01-01')),' ')) + '2014-01-01' as d 
+         
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+        ) date_array 
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+        ;

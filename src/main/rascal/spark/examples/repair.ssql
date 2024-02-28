@@ -1,0 +1,11 @@
+--CREATE TABLE t1 (name STRING, age INT) USING parquet PARTITIONED BY (age)
+--    LOCATION "/tmp/namesAndAges.parquet";
+
+-- SELECT * FROM t1 does not return results
+SELECT * FROM t1;
+
+-- run REPAIR TABLE to recovers all the partitions
+REPAIR TABLE t1;
+
+-- SELECT * FROM t1 returns results
+SELECT * FROM t1;

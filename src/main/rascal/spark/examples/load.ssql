@@ -1,0 +1,30 @@
+SELECT * FROM students;
+
+
+CREATE TABLE test_load (name VARCHAR(64), address VARCHAR(64), student_id INT) USING HIVE;
+
+-- Assuming the students table is in '/user/hive/warehouse/'
+LOAD DATA LOCAL INPATH '/user/hive/warehouse/students' OVERWRITE INTO TABLE test_load;
+
+SELECT * FROM test_load;
+
+
+-- Example with partition specification.
+CREATE TABLE test_partition (c1 INT, c2 INT, c3 INT) PARTITIONED BY (c2, c3);
+
+INSERT INTO test_partition PARTITION (c2 = 2, c3 = 3) VALUES (1);
+
+INSERT INTO test_partition PARTITION (c2 = 5, c3 = 6) VALUES (4);
+
+INSERT INTO test_partition PARTITION (c2 = 8, c3 = 9) VALUES (7);
+
+SELECT * FROM test_partition;
+
+
+CREATE TABLE test_load_partition (c1 INT, c2 INT, c3 INT) USING HIVE PARTITIONED BY (c2, c3);
+
+-- Assuming the test_partition table is in '/user/hive/warehouse/'
+LOAD DATA LOCAL INPATH '/user/hive/warehouse/test_partition/c2=2/c3=3'
+    OVERWRITE INTO TABLE test_load_partition PARTITION (c2=2, c3=3);
+
+SELECT * FROM test_load_partition;

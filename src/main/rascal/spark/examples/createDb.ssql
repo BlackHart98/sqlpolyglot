@@ -1,0 +1,13 @@
+CREATE DATABASE customer_db;
+-- Create database `customer_db`. This throws exception if database with name customer_db
+-- already exists.
+-- Create database `customer_db` only if database with same name doesn't exist.
+CREATE DATABASE IF NOT EXISTS customer_db;
+
+-- Create database `customer_db` only if database with same name doesn't exist with 
+-- `Comments`,`Specific Location` and `Database properties`.
+CREATE DATABASE IF NOT EXISTS customer_db COMMENT 'This is customer database' LOCATION '/user'
+    WITH DBPROPERTIES (ID=001, Name='John');
+
+-- Verify that properties are set.
+DESCRIBE DATABASE EXTENDED customer_db;

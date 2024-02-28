@@ -1,0 +1,4 @@
+INSERT OVERWRITE LOCAL DIRECTORY '/path/to/output/directory'
+USING parquet
+OPTIONS ('compression'='snappy')
+SELECT name, age FROM people WHERE age > 30

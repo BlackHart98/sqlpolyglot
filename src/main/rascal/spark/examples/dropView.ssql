@@ -1,0 +1,13 @@
+DROP VIEW employeeView;
+
+-- Assumes a view named `employeeView` exists in the `userdb` database
+DROP VIEW userdb.employeeView;
+
+-- Assumes a view named `employeeView` does not exist.
+-- Throws exception
+DROP VIEW employeeView;
+
+
+-- Assumes a view named `employeeView` does not exist,Try with IF EXISTS
+-- this time it will not throw exception
+DROP VIEW IF EXISTS employeeView;

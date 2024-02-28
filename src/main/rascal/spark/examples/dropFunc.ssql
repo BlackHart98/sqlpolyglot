@@ -1,0 +1,27 @@
+CREATE FUNCTION test_avg AS 'org.apache.hadoop.hive.ql.udf.generic.GenericUDAFAverage';
+
+-- List user functions
+SHOW USER FUNCTIONS;
+
+
+-- Create Temporary function `test_avg`
+CREATE TEMPORARY FUNCTION test_avg AS
+    'org.apache.hadoop.hive.ql.udf.generic.GenericUDAFAverage';
+
+-- List user functions
+SHOW USER FUNCTIONS;
+
+
+-- Drop Permanent function
+DROP FUNCTION test_avg;
+
+-- Try to drop Permanent function which is not present
+DROP FUNCTION test_avg;
+
+
+-- List the functions after dropping, it should list only temporary function
+SHOW USER FUNCTIONS;
+
+  
+-- Drop Temporary function
+DROP TEMPORARY FUNCTION IF EXISTS test_avg;

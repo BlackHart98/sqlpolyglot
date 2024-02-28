@@ -1,0 +1,5 @@
+INSERT OVERWRITE TABLE stats
+PARTITION(country = 'US', year = '2017', month = '3', day='5')
+SELECT ad
+FROM impression_logs
+GROUP BY ad

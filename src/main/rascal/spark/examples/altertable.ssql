@@ -1,0 +1,114 @@
+DESC student;
+
+ALTER TABLE Student RENAME TO StudentInfo;
+
+DESC StudentInfo;
+
+SHOW PARTITIONS StudentInfo;
+
+ALTER TABLE default.StudentInfo PARTITION (age='10') RENAME TO PARTITION (age='15');
+
+
+SHOW PARTITIONS StudentInfo;
+
+
+-- Add new columns to a table
+DESC StudentInfo;
+
+
+ALTER TABLE StudentInfo ADD columns (LastName string, DOB timestamp);
+
+-- After Adding New columns to the table
+DESC StudentInfo;
+
+-- Drop columns of a table
+DESC StudentInfo;
+
+ALTER TABLE StudentInfo DROP columns (LastName, DOB);
+
+-- After dropping columns of the table
+DESC StudentInfo;
+
+-- Rename a column of a table
+DESC StudentInfo;
+
+ALTER TABLE StudentInfo RENAME COLUMN name TO FirstName;
+
+-- After renaming a column of the table
+DESC StudentInfo;
+
+-- ALTER OR CHANGE COLUMNS
+DESC StudentInfo;
+
+--ALTER TABLE StudentInfo ALTER COLUMN FirstName COMMENT "new comment";
+
+-- After ALTER or CHANGE COLUMNS
+DESC StudentInfo;
+
+
+-- REPLACE COLUMNS
+DESC StudentInfo;
+
+
+ALTER TABLE StudentInfo REPLACE COLUMNS (name string, ID int COMMENT 'new comment');
+
+-- After replacing COLUMNS
+DESC StudentInfo;
+
+-- Add a new partition to a table 
+SHOW PARTITIONS StudentInfo;
+
+
+ALTER TABLE StudentInfo ADD IF NOT EXISTS PARTITION (age=18);
+
+-- After adding a new partition to the table
+SHOW PARTITIONS StudentInfo;
+
+
+-- Drop a partition from the table 
+SHOW PARTITIONS StudentInfo;
+
+
+ALTER TABLE StudentInfo DROP IF EXISTS PARTITION (age=18);
+
+-- After dropping the partition of the table
+SHOW PARTITIONS StudentInfo;
+
+
+-- Adding multiple partitions to the table
+SHOW PARTITIONS StudentInfo;
+
+
+--ALTER TABLE StudentInfo ADD IF NOT EXISTS PARTITION (age=18) PARTITION (age=20);
+
+-- After adding multiple partitions to the table
+SHOW PARTITIONS StudentInfo;
+
+
+-- Change the fileformat
+ALTER TABLE loc_orc SET fileformat orc;
+
+ALTER TABLE p1 partition (month=2, day=2) SET fileformat parquet;
+
+-- Change the file Location
+ALTER TABLE dbx.tab1 PARTITION (a='1', b='2') SET LOCATION '/path/to/part/ways';
+
+-- SET SERDE/ SERDE Properties
+ALTER TABLE test_tab SET SERDE 'org.apache.hadoop.hive.serde2.columnar.LazyBinaryColumnarSerDe';
+
+ALTER TABLE dbx.tab1 SET SERDE 'org.apache.hadoop' WITH SERDEPROPERTIES ('k' = 'v', 'kay' = 'vee');
+
+-- SET TABLE PROPERTIES
+ALTER TABLE dbx.tab1 SET TBLPROPERTIES ('winner' = 'loser');
+
+-- SET TABLE COMMENT Using SET PROPERTIES
+ALTER TABLE dbx.tab1 SET TBLPROPERTIES ('comment' = 'A table comment.');
+
+-- Alter TABLE COMMENT Using SET PROPERTIES
+ALTER TABLE dbx.tab1 SET TBLPROPERTIES ('comment' = 'This is a new comment.');
+
+-- DROP TABLE PROPERTIES
+ALTER TABLE dbx.tab1 UNSET TBLPROPERTIES ('winner');
+
+-- RECOVER PARTITIONS
+ALTER TABLE dbx.tab1 RECOVER PARTITIONS;
